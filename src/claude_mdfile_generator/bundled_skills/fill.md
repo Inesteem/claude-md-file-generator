@@ -557,3 +557,122 @@ If no database is used, write "No database configured. Consider removing the Dat
 ```
 
 If the project does not use external APIs, write "No external API integrations. Consider removing the API Interaction module."
+
+---
+
+## `<Fill TODO Inventory>`
+
+**What to read:** All source files — grep for TODO, FIXME, HACK, WORKAROUND, XXX comments.
+
+**Verification:** Run a codebase-wide search and categorize results.
+
+**Ask the user:**
+- Are any of these TODOs no longer relevant and should be cleaned up?
+- Are there known technical debt items not captured by code comments?
+
+**Output format:**
+```markdown
+## TODO Inventory
+
+### Summary
+- **TODO:** <count>
+- **FIXME:** <count>
+- **HACK/WORKAROUND:** <count>
+
+### Critical Items (FIXMEs and HACKs)
+| File | Line | Category | Context |
+|---|---|---|---|
+| `<path>` | <line> | FIXME | <description> |
+
+### Patterns
+- <observations, e.g. "most TODOs are in the migration layer">
+
+### Orphaned TODOs
+- <TODOs that don't reference a ticket or issue>
+```
+
+If no TODOs/FIXMEs exist, write "No TODO/FIXME comments found in the codebase."
+
+---
+
+## `<Fill Changelog Configuration>`
+
+**What to read:** CHANGELOG.md, version fields in config files (pyproject.toml, package.json, Cargo.toml), CI config for release automation, GitHub Releases.
+
+**Verification:** Check for changelog file, version definitions, and release workflows.
+
+**Ask the user:**
+- What is the release process? (manual tags, automated, CI-triggered?)
+- Is there a versioning policy (semver strict, or more relaxed)?
+
+**Output format:**
+```markdown
+## Changelog Configuration
+
+- **Changelog file:** `<path, or "none">`
+- **Format:** <Keep a Changelog, conventional-changelog, custom, etc.>
+- **Version source:** `<file and field where version is defined>`
+- **Versioning scheme:** <semver, calver, or other>
+- **Automation:** <tool if any (release-please, towncrier, etc.), or "manual">
+- **Release process:** <how releases happen>
+```
+
+If no changelog exists, write "No changelog configured. Consider creating a CHANGELOG.md."
+
+---
+
+## Final Review Pass
+
+**After filling ALL template sections**, do a final coherence review of the entire CLAUDE.md file:
+
+### 1. Check for duplicated advice
+Scan every section (both static and filled templates) for rules or instructions that say the same thing in different words. Common duplications:
+- Git commit conventions appearing in both "Git Rules" (static) and "Git Configuration" (filled)
+- Testing commands appearing in both "Project Context" and "Testing Configuration"
+- Linting instructions in both "Code Quality" (static) and "Linter Configuration" (filled)
+
+**Action:** When you find duplicates, keep the more specific/project-tailored version and remove or shorten the generic one. If the static module says "use conventional commits" and the filled template says "this project uses Angular-style conventional commits with ticket prefixes", the static bullet is redundant — remove it or add a note like "See Git Configuration above for this project's specific format."
+
+### 2. Check for contradictions
+Look for cases where a static module's generic advice conflicts with the project's actual setup discovered during template filling. For example:
+- Static says "prefer strict type checking" but the project uses `basic` mode intentionally
+- Static says "split unit and integration tests" but the project has a flat test directory by design
+
+**Action:** When you find contradictions, adjust the static bullet to acknowledge the project's actual choice, or add a note explaining why the project deviates.
+
+### 3. Check for irrelevant sections
+Some static modules may not apply to this project at all:
+- "Database Conventions" in a project with no database
+- "API Interaction" in a project with no external API calls
+- "Cross-Platform Compatibility" in a Linux-only tool
+
+**Action:** If a filled template explicitly says "not applicable" or "none configured", recommend removing the corresponding static module from this CLAUDE.md. Add a comment: `<!-- Removed: Database Conventions — no database in this project -->`
+
+### 4. Suggest restructuring
+After reviewing the full file, note any opportunities to:
+- Merge sections that are too granular (e.g., if Linter + Formatter + Type Checker are each 2 lines, suggest combining into one "Tooling" section)
+- Reorder sections that would read better in a different sequence
+- Promote important project-specific details that are buried deep
+
+**Action:** Present restructuring suggestions to the user as recommendations, not automatic changes. The user decides whether to accept them.
+
+### Output
+At the end of the fill process, present a brief review summary:
+
+```
+## Fill Review
+
+### Duplications found
+- <description of each duplication and how it was resolved>
+
+### Contradictions found
+- <description and resolution>
+
+### Irrelevant sections
+- <sections recommended for removal>
+
+### Restructuring suggestions
+- <optional improvements>
+```
+
+If the file is clean, write "No duplications, contradictions, or irrelevant sections found."
