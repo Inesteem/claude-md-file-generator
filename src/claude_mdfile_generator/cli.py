@@ -9,7 +9,7 @@ from . import __version__
 from .bundled import bundled_modules_path, copy_bundled_modules, copy_bundled_skills
 from .generator import generate
 from .storage import list_modules
-from .tui import DEFAULT_MODULES_DIR, run_tui
+from .tui import DEFAULT_MODULES_DIR, _module_source, run_tui
 
 
 def _resolve_modules_dir(args: argparse.Namespace) -> Path:
@@ -53,6 +53,7 @@ def cmd_list(args: argparse.Namespace) -> None:
             {
                 "name": m.name,
                 "type": m.type.value,
+                "source": _module_source(m),
                 "order": m.order,
                 "tags": m.tags,
                 "description": m.description,
@@ -63,9 +64,10 @@ def cmd_list(args: argparse.Namespace) -> None:
         print(json.dumps(data, indent=2))
     else:
         for m in modules:
+            source = _module_source(m)
             tags = ", ".join(m.tags) if m.tags else ""
             desc = m.description or ""
-            print(f"{m.order:3d} | {m.type.value:8s} | {m.name:40s} | {tags:30s} | {desc}")
+            print(f"{m.order:3d} | {m.type.value:8s} | {source:7s} | {m.name:40s} | {tags:30s} | {desc}")
 
 
 def cmd_generate(args: argparse.Namespace) -> None:

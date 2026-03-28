@@ -102,6 +102,19 @@ def _edit_in_editor(initial_content: str = "") -> str | None:
         Path(tmp_path).unlink(missing_ok=True)
 
 
+def _bundled_filenames() -> set[str]:
+    """Return the set of filenames in the bundled modules directory."""
+    try:
+        return {f.name for f in bundled_modules_path().glob("*.md")}
+    except Exception:
+        return set()
+
+
+def _module_source(module: Module) -> str:
+    """Return 'bundled' or 'user' depending on whether the module ships with the package."""
+    return "bundled" if module.filename in _bundled_filenames() else "user"
+
+
 def _display_modules_table(modules: list[Module]) -> None:
     if not modules:
         console.print("[dim]No modules found.[/dim]")
@@ -109,13 +122,17 @@ def _display_modules_table(modules: list[Module]) -> None:
     table = Table(title="Available Modules")
     table.add_column("Name", style="bold cyan")
     table.add_column("Type", style="green")
+    table.add_column("Source")
     table.add_column("Order", justify="right")
     table.add_column("Tags")
     table.add_column("Description", style="dim")
     for m in modules:
+        source = _module_source(m)
+        source_style = "dim" if source == "bundled" else "bold yellow"
         table.add_row(
             m.name,
             m.type.value,
+            f"[{source_style}]{source}[/{source_style}]",
             str(m.order),
             ", ".join(m.tags) if m.tags else "-",
             m.description or "-",
@@ -129,13 +146,13 @@ def action_browse_and_generate(modules_dir: Path) -> None:
         console.print("[yellow]No modules found. Create some first![/yellow]")
         return
 
-    choices = [
-        questionary.Choice(
-            title=f"{m.name} [{m.type.value}] - {m.description or 'No description'}",
-            value=m,
+    choices = []
+    for m in modules:
+        marker = "*" if _module_source(m) == "user" else " "
+        desc = m.description or "No description"
+        choices.append(
+            questionary.Choice(title=f"{marker} {m.name} [{m.type.value}] - {desc}", value=m)
         )
-        for m in modules
-    ]
     selected = _checkbox_auto_advance(
         "Select modules to include in your claude.md:",
         choices=choices,
