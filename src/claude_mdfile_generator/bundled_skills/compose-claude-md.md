@@ -105,7 +105,31 @@ After filling all templates, review the complete CLAUDE.md for:
 
 Present a summary of findings and the complete CLAUDE.md to the user for review.
 
-## Example: Full workflow for a Python project
+## Augmenting an existing CLAUDE.md
+
+If the project already has a CLAUDE.md and the user wants to add specific modules to it:
+
+1. **Read the existing CLAUDE.md** and identify which sections are already present
+2. **List available modules** and determine which ones are missing
+3. **Generate only the missing modules** and append them:
+
+```bash
+# Append specific modules to an existing file
+claude-md generate --bundled \
+  --modules "Testing Configuration,Linter Configuration,Security" \
+  --append -o CLAUDE.md
+```
+
+4. **Fill any new `<Fill ...>` blocks** that were added
+5. **Review for duplications** — the new modules may overlap with content already in the file. Check and deduplicate.
+
+**Important:** When appending, the agent should:
+- Read the existing file first to understand what's already there
+- Only add modules whose content is not already covered
+- After appending, review the full file for coherence — the ordering of appended sections may need adjustment
+- Remove any `<Fill ...>` blocks for templates whose content is already manually written in the existing file
+
+## Example: New CLAUDE.md for a Python project
 
 ```bash
 # 1. See what's available
@@ -122,11 +146,29 @@ claude-md generate --bundled \
 # 4. Review and present to user
 ```
 
+## Example: Add modules to an existing CLAUDE.md
+
+```bash
+# 1. Check what's already in the file
+cat CLAUDE.md
+
+# 2. See what modules are available
+claude-md list --bundled --json
+
+# 3. Append only the missing modules
+claude-md generate --bundled \
+  --modules "Testing Configuration,Linter Configuration,Formatter Configuration" \
+  --append -o CLAUDE.md
+
+# 4. Fill the new <Fill ...> blocks
+# 5. Review the full file for duplications and coherence
+```
+
 ## CLI Reference
 
 ```
 claude-md list [--json] [--tags TAGS] [--type static|template] [--bundled] [--modules-dir PATH]
-claude-md generate [--modules NAMES] [--tags TAGS] [--type static|template] [--exclude NAMES] [-o FILE] [--bundled] [--modules-dir PATH]
+claude-md generate [--modules NAMES] [--tags TAGS] [--type static|template] [--exclude NAMES] [-o FILE] [--append] [--bundled] [--modules-dir PATH]
 claude-md init [--modules-dir PATH]
 claude-md init-skills DEST
 claude-md                              # launch interactive TUI (default)

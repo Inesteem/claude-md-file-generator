@@ -103,8 +103,13 @@ def cmd_generate(args: argparse.Namespace) -> None:
 
     if args.output:
         out = Path(args.output)
+        if args.append and out.exists():
+            existing = out.read_text()
+            output = existing.rstrip("\n") + "\n\n" + output
+            print(f"Appended {len(selected)} modules to {out}", file=sys.stderr)
+        else:
+            print(f"Written {len(selected)} modules to {out}", file=sys.stderr)
         out.write_text(output)
-        print(f"Written {len(selected)} modules to {out}", file=sys.stderr)
     else:
         print(output)
 
@@ -158,6 +163,9 @@ def main() -> None:
     p_gen.add_argument("--type", choices=["static", "template"], default=None, help="Include only this module type")
     p_gen.add_argument("--exclude", type=str, default=None, help="Module names to exclude (comma-separated)")
     p_gen.add_argument("-o", "--output", type=str, default=None, help="Output file path (default: stdout)")
+    p_gen.add_argument(
+        "--append", action="store_true", help="Append to existing file instead of overwriting (requires -o)"
+    )
     p_gen.set_defaults(func=cmd_generate)
 
     # --- init ---

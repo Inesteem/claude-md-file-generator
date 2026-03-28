@@ -214,3 +214,28 @@ class TestGenerateSubcommand:
             with pytest.raises(SystemExit) as exc:
                 main()
             assert exc.value.code == 1
+
+    def test_generate_append_to_existing(self, tmp_path, capsys):
+        out = tmp_path / "CLAUDE.md"
+        out.write_text("# Existing Content\n\nSome rules here.\n")
+        with patch(
+            "sys.argv", ["claude-md", "--bundled", "generate", "--modules", "Security", "--append", "-o", str(out)]
+        ):
+            main()
+        content = out.read_text()
+        assert content.startswith("# Existing Content")
+        assert "## Security" in content
+        captured = capsys.readouterr()
+        assert "Appended" in captured.err
+
+    def test_generate_append_creates_new_if_missing(self, tmp_path, capsys):
+        out = tmp_path / "NEW.md"
+        with patch(
+            "sys.argv", ["claude-md", "--bundled", "generate", "--modules", "Security", "--append", "-o", str(out)]
+        ):
+            main()
+        assert out.exists()
+        content = out.read_text()
+        assert "## Security" in content
+        captured = capsys.readouterr()
+        assert "Written" in captured.err
