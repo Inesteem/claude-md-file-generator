@@ -3,7 +3,7 @@
 ## Setup
 
 ```bash
-git clone https://github.com/yourusername/claude-mdfile-generator.git
+git clone https://github.com/Inesteem/claude-mdfile-generator.git
 cd claude-mdfile-generator
 python3 -m venv .venv
 source .venv/bin/activate

@@ -1,10 +1,10 @@
 # claude-mdfile-generator
 
-[![CI](https://github.com/yourusername/claude-mdfile-generator/actions/workflows/ci.yml/badge.svg)](https://github.com/yourusername/claude-mdfile-generator/actions/workflows/ci.yml)
+[![CI](https://github.com/Inesteem/claude-mdfile-generator/actions/workflows/ci.yml/badge.svg)](https://github.com/Inesteem/claude-mdfile-generator/actions/workflows/ci.yml)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-Stop writing `CLAUDE.md` files from scratch. Pick from 38 reusable modules — generic best practices and agent-filled project-specific templates — preview the result, and generate a tailored `CLAUDE.md` in seconds.
+Stop writing `CLAUDE.md` files from scratch. Pick from 42 reusable modules — generic best practices and agent-filled project-specific templates — preview the result, and generate a tailored `CLAUDE.md` in seconds.
 
 **Static modules** give universal rules ("use conventional commits", "write tests first"). **Template modules** produce `<Fill ...>` placeholders that an agent analyzes your codebase to fill in ("this project uses pytest, tests in `tests/`, 90% coverage required").
 
@@ -12,7 +12,7 @@ Stop writing `CLAUDE.md` files from scratch. Pick from 38 reusable modules — g
 
 ```bash
 # Install from GitHub
-pip install git+https://github.com/yourusername/claude-mdfile-generator.git
+pip install git+https://github.com/Inesteem/claude-mdfile-generator.git
 
 # Bootstrap your modules directory with all 42 bundled modules
 claude-md --init
@@ -26,13 +26,13 @@ claude-md --bundled
 ### From GitHub
 
 ```bash
-pip install git+https://github.com/yourusername/claude-mdfile-generator.git
+pip install git+https://github.com/Inesteem/claude-mdfile-generator.git
 ```
 
 ### From source (for development)
 
 ```bash
-git clone https://github.com/yourusername/claude-mdfile-generator.git
+git clone https://github.com/Inesteem/claude-mdfile-generator.git
 cd claude-mdfile-generator
 python3 -m venv .venv
 source .venv/bin/activate
