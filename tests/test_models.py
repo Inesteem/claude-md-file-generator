@@ -66,11 +66,11 @@ class TestModule:
 
     def test_slug_special_characters(self):
         mod = Module(name="CI/CD Pipeline", type=ModuleType.STATIC, content="x")
-        assert mod.slug == "ci-cd-pipeline"
+        assert mod.slug == "cicd-pipeline"
 
     def test_slug_multiple_spaces(self):
         mod = Module(name="My  Great  Module", type=ModuleType.STATIC, content="x")
-        assert mod.slug == "my--great--module"
+        assert mod.slug == "my-great-module"
 
     def test_filename(self):
         mod = Module(name="Git Rules", type=ModuleType.STATIC, content="x")
@@ -78,7 +78,7 @@ class TestModule:
 
     def test_slug_unicode(self):
         mod = Module(name="Über Module", type=ModuleType.STATIC, content="x")
-        assert mod.slug == "über-module"
+        assert mod.slug == "ber-module"
 
     def test_slug_already_lowercase(self):
         mod = Module(name="simple", type=ModuleType.STATIC, content="x")

@@ -1,6 +1,7 @@
 """Terminal UI for module management and claude.md generation."""
 
 import os
+import shlex
 import subprocess
 import tempfile
 from pathlib import Path
@@ -29,13 +30,13 @@ def get_modules_dir() -> Path:
 
 def _edit_in_editor(initial_content: str = "") -> str | None:
     """Open the user's $EDITOR with initial content and return the result."""
-    editor = os.environ.get("EDITOR", "vi")
+    editor_cmd = shlex.split(os.environ.get("EDITOR", "vi"))
     with tempfile.NamedTemporaryFile(suffix=".md", mode="w", delete=False) as f:
         f.write(initial_content)
         f.flush()
         tmp_path = f.name
     try:
-        result = subprocess.run([editor, tmp_path])
+        result = subprocess.run([*editor_cmd, tmp_path])
         if result.returncode != 0:
             return None
         return Path(tmp_path).read_text()
@@ -120,9 +121,11 @@ def action_create_module(modules_dir: Path) -> None:
     order = int(order_str) if order_str and order_str.isdigit() else 50
 
     if mod_type == "template":
-        tag_name = questionary.text("Template tag name (e.g. Architecture):", default=name).ask()
+        tag_name = questionary.text(
+            "Template tag name — will be wrapped as <Fill TagName> (e.g. Architecture):", default=name
+        ).ask()
         hint = questionary.text("Instructions for the agent:").ask() or "Fill in this section."
-        content = f"<{tag_name}>\n{hint}\n</{tag_name}>\n"
+        content = f"<Fill {tag_name}>\n{hint}\n</Fill {tag_name}>\n"
     else:
         console.print("[dim]Opening editor for module content...[/dim]")
         content = _edit_in_editor(f"## {name}\n\n")

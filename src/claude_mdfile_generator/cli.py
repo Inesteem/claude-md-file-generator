@@ -3,12 +3,14 @@
 import argparse
 from pathlib import Path
 
+from . import __version__
 from .bundled import bundled_modules_path, copy_bundled_modules, copy_bundled_skills
 from .tui import DEFAULT_MODULES_DIR, run_tui
 
 
 def main():
     parser = argparse.ArgumentParser(description="Generate claude.md files from reusable modules")
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     parser.add_argument(
         "--modules-dir",
         type=Path,

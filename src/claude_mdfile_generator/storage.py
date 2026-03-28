@@ -59,6 +59,9 @@ def load_module(path: Path) -> Module:
 def save_module(module: Module, directory: Path) -> Path:
     """Serialize a Module to a .md file. Returns the written path."""
     directory.mkdir(parents=True, exist_ok=True)
+    path = (directory / module.filename).resolve()
+    if not path.is_relative_to(directory.resolve()):
+        raise StorageError(f"Module filename escapes target directory: {module.filename}")
     meta = {
         "name": module.name,
         "type": module.type.value,
@@ -68,7 +71,6 @@ def save_module(module: Module, directory: Path) -> Path:
     if module.description:
         meta["description"] = module.description
 
-    path = directory / module.filename
     path.write_text(_serialize_frontmatter(meta, module.content))
     return path
 

@@ -8,5 +8,5 @@ def generate(modules: list[Module]) -> str:
     if not modules:
         return ""
     sorted_modules = sorted(modules, key=lambda m: (m.order, m.name))
-    sections = [m.content for m in sorted_modules]
-    return "\n".join(sections)
+    sections = [m.content.rstrip("\n") for m in sorted_modules]
+    return "\n\n".join(sections) + "\n"

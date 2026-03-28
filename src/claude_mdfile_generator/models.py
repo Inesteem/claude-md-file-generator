@@ -1,5 +1,6 @@
 """Module data model for claude.md generation."""
 
+import re
 from dataclasses import dataclass, field
 from enum import StrEnum
 
@@ -20,7 +21,11 @@ class Module:
 
     @property
     def slug(self) -> str:
-        return self.name.lower().replace(" ", "-").replace("/", "-")
+        s = self.name.lower()
+        s = re.sub(r"[^a-z0-9\s-]", "", s)
+        s = re.sub(r"[\s]+", "-", s)
+        s = re.sub(r"-+", "-", s)
+        return s.strip("-") or "unnamed"
 
     @property
     def filename(self) -> str:
