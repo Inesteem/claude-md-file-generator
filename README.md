@@ -2,13 +2,39 @@
 
 A lightweight TUI for composing `CLAUDE.md` files from a library of reusable modules. Pick the modules that apply to your project, preview the result, and write it out in one step.
 
+## Requirements
+
+- Python 3.11+
+
+Runtime dependencies:
+
+| Package | Version | Purpose |
+|---|---|---|
+| `pyyaml` | >=6.0 | YAML frontmatter parsing in module files |
+| `questionary` | >=2.0 | Interactive terminal prompts (checkbox, select, text) |
+| `rich` | >=13.0 | Pretty terminal output (tables, panels, markdown preview) |
+
+Dev dependencies:
+
+| Package | Version | Purpose |
+|---|---|---|
+| `pytest` | >=8.0 | Test framework |
+
+Pinned versions are available in `requirements.txt` and `requirements-dev.txt`.
+
 ## Installation
 
-```
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
-Requires Python 3.11+.
+Or without editable install:
+
+```bash
+pip install -r requirements-dev.txt
+```
 
 ## Usage
 
