@@ -12,6 +12,7 @@ from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.table import Table
 
+from .bundled import bundled_modules_path, copy_bundled_modules
 from .generator import generate
 from .models import Module, ModuleType
 from .storage import delete_module, list_modules, save_module
@@ -19,6 +20,31 @@ from .storage import delete_module, list_modules, save_module
 console = Console()
 
 DEFAULT_MODULES_DIR = Path.home() / ".config" / "claude-mdfile-generator" / "modules"
+
+
+def _is_bundled(modules_dir: Path) -> bool:
+    """Check if the modules directory is the read-only bundled path."""
+    try:
+        return modules_dir.resolve() == bundled_modules_path().resolve()
+    except Exception:
+        return False
+
+
+def _ensure_writable(modules_dir: Path) -> Path:
+    """If modules_dir is the bundled (read-only) path, copy to user config dir and switch.
+
+    Returns the writable modules directory.
+    """
+    if not _is_bundled(modules_dir):
+        return modules_dir
+
+    console.print(
+        "[yellow]Bundled modules are read-only. "
+        f"Copying to {DEFAULT_MODULES_DIR} for editing...[/yellow]"
+    )
+    count = copy_bundled_modules(DEFAULT_MODULES_DIR)
+    console.print(f"[green]Copied {count} modules to {DEFAULT_MODULES_DIR}[/green]")
+    return DEFAULT_MODULES_DIR
 
 
 def _checkbox_auto_advance(message: str, choices: list[questionary.Choice]) -> list | None:  # pyright: ignore[reportReturnType]
@@ -279,8 +305,11 @@ def run_tui(modules_dir: Path | None = None) -> None:
         elif action.startswith("Browse"):
             action_browse_and_generate(modules_dir)
         elif action.startswith("Create"):
+            modules_dir = _ensure_writable(modules_dir)
             action_create_module(modules_dir)
         elif action.startswith("Edit"):
+            modules_dir = _ensure_writable(modules_dir)
             action_edit_module(modules_dir)
         elif action.startswith("Delete"):
+            modules_dir = _ensure_writable(modules_dir)
             action_delete_module(modules_dir)
