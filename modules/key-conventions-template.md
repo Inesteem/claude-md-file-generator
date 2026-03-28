@@ -5,7 +5,7 @@ tags: [conventions]
 order: 6
 description: Project-specific patterns and constraints (agent-filled)
 ---
-<Key Conventions>
+<Fill Key Conventions>
 Document the project-specific conventions an agent must follow:
 - Error handling approach (exceptions, Result types, error codes, HTTP status patterns)
 - Logging conventions (library, log levels, structured vs. unstructured, what to log)
@@ -15,4 +15,4 @@ Document the project-specific conventions an agent must follow:
 - Testing conventions (naming, fixture patterns, mocking approach)
 - Important configuration files and where settings live
 - Any patterns that look wrong but are intentional — explain why here
-</Key Conventions>
+</Fill Key Conventions>

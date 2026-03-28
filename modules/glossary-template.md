@@ -5,7 +5,7 @@ tags: [glossary, terminology]
 order: 3
 description: Project-specific terms, abbreviations, and domain jargon (agent-filled)
 ---
-<Glossary>
+<Fill Glossary>
 Define project-specific terminology an agent needs to understand.
 Only include terms that would confuse someone unfamiliar with the project —
 skip anything obvious from the tech stack or standard industry usage.
@@ -21,4 +21,4 @@ Format each entry as:
 
 **Term**
 : Definition and relevant context.
-</Glossary>
+</Fill Glossary>
