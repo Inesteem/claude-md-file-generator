@@ -67,11 +67,11 @@ claude-md
 ```
 
 The TUI lets you:
-1. **Browse** all available modules in a table
-2. **Select** the modules you want via checkbox
+1. **Browse** all available modules in a table — bundled modules show as `bundled` (dim), your custom modules as `user` (highlighted)
+2. **Select** the modules you want via checkbox (space toggles and auto-advances, user modules marked with `*`)
 3. **Preview** the assembled `CLAUDE.md` in the terminal
-4. **Write** it to a file (default: `CLAUDE.md`)
-5. **Create, edit, and delete** modules through the menu
+4. **Write** it to a file (default: `CLAUDE.md`) with overwrite confirmation
+5. **Create, edit, and delete** modules through the menu (auto-migrates bundled to user config dir on first write)
 
 ### Subcommands
 
