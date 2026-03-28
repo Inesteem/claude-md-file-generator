@@ -13,6 +13,9 @@ dependencies = [
     "rich>=13.0",
 ]
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/claude_mdfile_generator"]
+
 [project.scripts]
 claude-md = "claude_mdfile_generator.cli:main"
 
