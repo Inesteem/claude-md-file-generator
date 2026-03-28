@@ -21,6 +21,38 @@ console = Console()
 DEFAULT_MODULES_DIR = Path.home() / ".config" / "claude-mdfile-generator" / "modules"
 
 
+def _checkbox_auto_advance(message: str, choices: list[questionary.Choice]) -> list | None:  # pyright: ignore[reportReturnType]
+    """Checkbox prompt where space toggles AND moves to the next item."""
+    from questionary.prompts.checkbox import InquirerControl  # pyright: ignore[reportPrivateImportUsage]
+
+    question = questionary.checkbox(message, choices=choices)
+    app = question.application
+
+    # Find the InquirerControl instance in the layout
+    ic = None
+    for win in app.layout.find_all_windows():
+        if isinstance(win.content, InquirerControl):
+            ic = win.content
+            break
+
+    if ic is None:
+        return question.ask()
+
+    # Patch the space keybinding to also advance the cursor after toggling
+    for binding in app.key_bindings.bindings:  # pyright: ignore[reportOptionalMemberAccess]
+        if binding.keys == (" ",):
+            original_handler = binding.handler
+
+            def patched_handler(event, _orig=original_handler, _ic=ic):  # type: ignore[no-untyped-def]
+                _orig(event)
+                _ic.select_next()
+
+            binding.handler = patched_handler
+            break
+
+    return question.ask()
+
+
 def get_modules_dir() -> Path:
     env = os.environ.get("CLAUDE_MD_MODULES_DIR")
     if env:
@@ -78,10 +110,10 @@ def action_browse_and_generate(modules_dir: Path) -> None:
         )
         for m in modules
     ]
-    selected = questionary.checkbox(
+    selected = _checkbox_auto_advance(
         "Select modules to include in your claude.md:",
         choices=choices,
-    ).ask()
+    )
 
     if not selected:
         console.print("[dim]No modules selected.[/dim]")
