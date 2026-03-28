@@ -17,7 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Slash commands: `/compose-claude-md` and `/fill-claude-md` in `.claude/commands/`
 - Non-interactive CLI: `claude-md list` and `claude-md generate` subcommands for agent/script use
 - `claude-md list` with `--json`, `--tags`, `--type` filtering
-- `claude-md generate` with `--modules`, `--tags`, `--type`, `--exclude`, `-o` output
+- `claude-md generate` with `--modules`, `--tags`, `--type`, `--exclude`, `--append`, `-o` output
+- `--append` flag to add modules to an existing CLAUDE.md without overwriting
+- Auto-advance in module selection: space toggles and moves to the next item
 - `claude-md init` to bootstrap user modules from the bundled library
 - `claude-md init-skills` to install agent skills
 - `--bundled` for access to bundled modules
