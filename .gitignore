@@ -9,3 +9,9 @@ build/
 .pytest_cache/
 .venv/
 venv/
+.ruff_cache/
+.pyright/
+.env
+*.whl
+*.tar.gz
+.DS_Store

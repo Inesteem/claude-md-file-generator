@@ -1,7 +1,7 @@
 ---
 name: Database Configuration
 type: template
-tags: [database, tooling]
+tags: [database, sql, tooling]
 order: 38
 description: Project-specific database engine, ORM, and migration setup (agent-filled and verified)
 ---

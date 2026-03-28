@@ -1,7 +1,7 @@
 ---
 name: Testing Configuration
 type: template
-tags: [testing, tooling]
+tags: [testing, tdd, tooling]
 order: 15
 description: Project-specific test framework, structure, and coverage (agent-filled and verified)
 ---

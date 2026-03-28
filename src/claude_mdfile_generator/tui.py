@@ -94,8 +94,16 @@ def action_browse_and_generate(modules_dir: Path) -> None:
     if not output_path:
         return
 
-    Path(output_path).write_text(output)
-    console.print(f"[bold green]Written to {output_path}[/bold green]")
+    out = Path(output_path)
+    if out.exists():
+        overwrite = questionary.confirm(f"{out} already exists. Overwrite?", default=False).ask()
+        if not overwrite:
+            return
+    try:
+        out.write_text(output)
+        console.print(f"[bold green]Written to {output_path}[/bold green]")
+    except OSError as e:
+        console.print(f"[red]Failed to write: {e}[/red]")
 
 
 def action_create_module(modules_dir: Path) -> None:

@@ -1,7 +1,7 @@
 ---
 name: Forbidden Zones
 type: template
-tags: [safety, boundaries]
+tags: [safety, anti-patterns, boundaries]
 order: 9
 description: Project-specific files and directories the agent must not modify (agent-filled, asks user)
 ---

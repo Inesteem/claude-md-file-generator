@@ -1,11 +1,18 @@
 # claude-mdfile-generator
 
-A lightweight TUI for composing `CLAUDE.md` files from a library of reusable modules. Pick the modules that apply to your project, preview the result, and write it out — then let an agent fill in the project-specific details.
+[![CI](https://github.com/yourusername/claude-mdfile-generator/actions/workflows/ci.yml/badge.svg)](https://github.com/yourusername/claude-mdfile-generator/actions/workflows/ci.yml)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
+Stop writing `CLAUDE.md` files from scratch. Pick from 38 reusable modules — generic best practices and agent-filled project-specific templates — preview the result, and generate a tailored `CLAUDE.md` in seconds.
+
+**Static modules** give universal rules ("use conventional commits", "write tests first"). **Template modules** produce `<Fill ...>` placeholders that an agent analyzes your codebase to fill in ("this project uses pytest, tests in `tests/`, 90% coverage required").
 
 ## Quick start
 
 ```bash
-pip install ~/path/to/claude-mdfile-generator
+# Install from GitHub
+pip install git+https://github.com/yourusername/claude-mdfile-generator.git
 
 # Bootstrap your modules directory with all 38 bundled modules
 claude-md --init
@@ -16,22 +23,23 @@ claude-md --bundled
 
 ## Installation
 
-### From source (editable, for development)
+### From GitHub
 
 ```bash
-cd ~/Documents/claude-mdfile-generator
+pip install git+https://github.com/yourusername/claude-mdfile-generator.git
+```
+
+### From source (for development)
+
+```bash
+git clone https://github.com/yourusername/claude-mdfile-generator.git
+cd claude-mdfile-generator
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
-### As a pip package (for use in any project)
-
-```bash
-pip install ~/Documents/claude-mdfile-generator
-```
-
-After installation, the `claude-md` command is available globally in the Python environment.
+After installation, the `claude-md` command is available in the Python environment.
 
 ### Requirements
 
@@ -189,7 +197,7 @@ The package ships with **38 modules** (20 template, 18 static) organized by topi
 | Investigation First (8) | — | Generic; no project-specific details needed |
 | Forbidden Actions (9) | Forbidden Zones (9) | Generated files, lock files, team-owned boundaries |
 | Git Rules (10) | Git Configuration (10) | Actual commit format, branch naming, merge strategy |
-| PR Workflow (12) | PR Configuration (12) | PR template, CODEOWNERS, labels, required checks |
+| Pull Requests (12) | PR Configuration (12) | PR template, CODEOWNERS, labels, required checks |
 | Testing (15) | Testing Configuration (15) | Framework, directory structure, coverage, fixtures |
 
 ### Code quality (static + template pairs)
@@ -313,7 +321,11 @@ claude-mdfile-generator/
     bundled.py         # Access bundled modules/skills shipped with the package
     bundled_modules/   # 38 bundled module files (embedded in pip package)
     bundled_skills/    # fill.md skill (embedded in pip package)
-  tests/               # 44 tests (models, storage, generator, TUI)
+  tests/               # 65 tests (models, storage, generator, TUI, CLI, bundled)
   modules/             # Source of truth for bundled modules (development copy)
   skills/              # Source of truth for bundled skills (development copy)
 ```
+
+## License
+
+MIT — see [LICENSE](LICENSE) for details.

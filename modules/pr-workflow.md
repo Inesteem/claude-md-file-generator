@@ -1,5 +1,5 @@
 ---
-name: PR Workflow
+name: Pull Requests
 type: static
 tags: [git, pr, workflow]
 order: 12

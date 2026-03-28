@@ -5,7 +5,7 @@ tags: [git, workflow]
 order: 10
 description: Git workflow conventions and commit practices
 ---
-## Git
+## Git Rules
 
 - Use conventional commits (feat:, fix:, refactor:, docs:, test:, chore:)
 - Write concise commit messages that explain the "why", not the "what"
