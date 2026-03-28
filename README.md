@@ -123,8 +123,13 @@ The `modules/` directory in this repository contains ready-to-use examples:
 | `tdd-practices.md` | 15 | static | TDD guidelines and testing patterns |
 | `code-style.md` | 20 | static | Code style and formatting |
 | `code-quality.md` | 22 | static | Linting and type checking |
+| `linter-config-template.md` | 23 | template | Linter setup and commands (verified) |
+| `type-checker-config-template.md` | 23 | template | Type checker setup and commands (verified) |
+| `formatter-config-template.md` | 24 | template | Formatter setup and commands (verified) |
 | `documentation.md` | 25 | static | Documentation practices |
 | `security.md` | 26 | static | Security and secrets handling |
+| `ci-pipeline-template.md` | 27 | template | CI/CD pipeline configuration (verified) |
+| `pre-commit-hooks-template.md` | 27 | template | Pre-commit hook setup (verified) |
 | `error-handling.md` | 28 | static | Error handling and resilience |
 | `dependency-management.md` | 30 | static | Keeping dependencies minimal |
 | `environment-setup.md` | 32 | static | Environment variables and setup |
@@ -151,6 +156,11 @@ The skill recognizes these tags:
 | `<Fill Glossary>` | Scans for domain-specific terms and jargon |
 | `<Fill Architecture>` | Maps directory structure, components, data flows |
 | `<Fill Key Conventions>` | Analyzes error handling, logging, naming, testing patterns |
+| `<Fill Linter Configuration>` | Identifies linter, runs it, documents config and commands |
+| `<Fill Formatter Configuration>` | Identifies formatter, runs check mode, documents settings |
+| `<Fill Type Checker Configuration>` | Identifies type checker, runs it, documents strictness |
+| `<Fill CI Pipeline>` | Reads CI config, documents checks, matrix, required gates |
+| `<Fill Pre-commit Hooks>` | Reads hook config, documents hooks in order, install command |
 
 ### Usage
 

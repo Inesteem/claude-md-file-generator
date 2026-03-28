@@ -155,3 +155,123 @@ Focus on what helps navigate the codebase. Omit subsections that don't apply.
 ```
 
 Only document conventions actually present in the code. Omit subsections where the project follows language defaults. For intentional oddities, always explain *why*.
+
+---
+
+## `<Fill Linter Configuration>`
+
+**What to read:** pyproject.toml, .ruff.toml, .eslintrc, .pylintrc, Makefile, CI config.
+
+**Verification:** Run the lint command and confirm it executes successfully. If it fails, document the failure.
+
+**Output format:**
+```markdown
+## Linter Configuration
+
+- **Linter:** <name and version if pinned>
+- **Command:** `<exact command>`
+- **Config:** `<config file path>`
+- **Auto-fix:** `<auto-fix command, if available>`
+- **Notable rules:** <any customized, disabled, or especially strict rules>
+```
+
+If no linter is configured, write "No linter configured." and move on.
+
+---
+
+## `<Fill Formatter Configuration>`
+
+**What to read:** pyproject.toml, .prettierrc, Makefile, CI config, pre-commit config.
+
+**Verification:** Run the format command in check/dry-run mode (e.g. `black --check .`, `prettier --check .`) and confirm it works.
+
+**Output format:**
+```markdown
+## Formatter Configuration
+
+- **Formatter:** <name and version if pinned>
+- **Command:** `<exact command>`
+- **Check mode:** `<dry-run command>`
+- **Config:** `<config file path>`
+- **Settings:** <line length, quote style, trailing commas, etc.>
+- **Enforcement:** <CI check, pre-commit hook, or manual>
+```
+
+If no formatter is configured, write "No formatter configured." and move on.
+
+---
+
+## `<Fill Type Checker Configuration>`
+
+**What to read:** pyrightconfig.json, mypy.ini, pyproject.toml [tool.mypy], tsconfig.json, CI config.
+
+**Verification:** Run the type checker and note whether it passes cleanly. Document any existing errors and whether they are known/accepted.
+
+**Output format:**
+```markdown
+## Type Checker Configuration
+
+- **Type checker:** <name and version if pinned>
+- **Command:** `<exact command>`
+- **Config:** `<config file path>`
+- **Strictness:** <strict, basic, or custom — note key overrides>
+- **Known suppressions:** <any intentional ignores and why>
+```
+
+If no type checker is configured, write "No type checker configured." and move on.
+
+---
+
+## `<Fill CI Pipeline>`
+
+**What to read:** .github/workflows/, .gitlab-ci.yml, Jenkinsfile, .circleci/, CI config files.
+
+**Verification:** Read the CI config files and confirm the documented steps match what is actually configured. Cross-check that commands referenced in CI match the project's actual test/lint/build commands.
+
+**Output format:**
+```markdown
+## CI Pipeline
+
+- **System:** <GitHub Actions, GitLab CI, etc.>
+- **Config:** `<config file path(s)>`
+
+### PR checks
+- <list each check: tests, lint, type check, build, etc.>
+
+### Merge to main
+- <deploy, publish, release — or "same as PR checks">
+
+### Matrix
+- <OS and runtime versions tested, if any>
+
+### Required checks
+- <checks that must pass before merging>
+```
+
+If no CI is configured, write "No CI pipeline configured." and move on.
+
+---
+
+## `<Fill Pre-commit Hooks>`
+
+**What to read:** .pre-commit-config.yaml, .husky/, package.json (lint-staged), lefthook.yml.
+
+**Verification:** Read the hook config and confirm hooks are correctly wired. Check that referenced tools are actually installed as project dependencies.
+
+**Output format:**
+```markdown
+## Pre-commit Hooks
+
+- **Framework:** <pre-commit, husky, lefthook, etc.>
+- **Config:** `<config file path>`
+- **Install:** `<command to activate hooks locally>`
+
+### Hooks (in order)
+1. <hook name> — <what it does>
+2. <hook name> — <what it does>
+
+### Bypass
+- `<command to skip hooks>` — only acceptable for <specific scenarios>
+```
+
+If no pre-commit hooks are configured, write "No pre-commit hooks configured." and move on.
