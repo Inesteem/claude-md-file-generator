@@ -13,12 +13,18 @@ from .tui import DEFAULT_MODULES_DIR, run_tui
 
 
 def _resolve_modules_dir(args: argparse.Namespace) -> Path:
-    """Resolve the modules directory from CLI args."""
-    if getattr(args, "bundled", False):
-        return Path(str(bundled_modules_path()))
+    """Resolve the modules directory from CLI args.
+
+    Priority: --modules-dir > --bundled > user config dir (if non-empty) > bundled fallback.
+    """
     if args.modules_dir:
         return args.modules_dir
-    return DEFAULT_MODULES_DIR
+    if getattr(args, "bundled", False):
+        return Path(str(bundled_modules_path()))
+    # Fall back to user config dir if it exists and has modules, otherwise use bundled
+    if DEFAULT_MODULES_DIR.exists() and any(DEFAULT_MODULES_DIR.glob("*.md")):
+        return DEFAULT_MODULES_DIR
+    return Path(str(bundled_modules_path()))
 
 
 def cmd_tui(args: argparse.Namespace) -> None:
