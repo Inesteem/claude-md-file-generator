@@ -137,3 +137,25 @@ The `modules/` directory in this repository contains ready-to-use examples:
 | `output-formatting.md` | 45 | static | Output formatting preferences |
 
 Copy any of these into your modules directory to get started.
+
+## Agent skills for template modules
+
+Template modules produce placeholder sections (e.g. `<Architecture>...</Architecture>`) in the generated `CLAUDE.md`. These are meant to be filled in by an agent that analyzes the target project.
+
+The `skills/` directory contains ready-made agent prompts for each template module:
+
+| Skill | Fills template | What the agent does |
+|---|---|---|
+| `fill-project-summary.md` | `<Project Summary>` | Reads README and entry points to summarize the project |
+| `fill-project-context.md` | `<Project Context>` | Extracts setup, test, lint commands and env requirements |
+| `fill-glossary.md` | `<Glossary>` | Scans for domain-specific terms and jargon |
+| `fill-architecture.md` | `<Architecture>` | Maps directory structure, components, data flows |
+| `fill-key-conventions.md` | `<Key Conventions>` | Analyzes error handling, logging, naming, testing patterns |
+
+### Usage
+
+1. Generate a `CLAUDE.md` with the TUI, including the template modules you want
+2. Point an agent at the target project with the corresponding skill prompt
+3. The agent reads the codebase and replaces the `<Template>` blocks with real content
+
+Each skill file contains detailed instructions, expected output format, and rules the agent must follow.
