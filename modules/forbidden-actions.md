@@ -9,6 +9,6 @@ description: Actions the agent must never take
 
 - Do not modify files outside the defined project scope
 - No speculative refactoring without first showing a diff plan for review
-- Never use "as an AI model..." or similar disclaimers — just answer
 - Do not add features beyond what was explicitly asked for
-- Do not create new files unnecessarily — edit existing ones when possible
+- Do not create config, utility, or helper files when the logic fits naturally in an existing file
+- Never silently delete or overwrite user code — confirm before destructive edits

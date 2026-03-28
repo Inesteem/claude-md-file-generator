@@ -6,14 +6,19 @@ order: 3
 description: Project-specific terms, abbreviations, and domain jargon (agent-filled)
 ---
 <Glossary>
-Define the project-specific terminology an agent needs to understand:
-- Internal service and system names with a one-line description of each
-- Domain jargon or business terms that differ from common usage
-- Abbreviations and acronyms used in the codebase or team communication
-- Any term whose meaning here differs from its general industry meaning
+Define project-specific terminology an agent needs to understand.
+Only include terms that would confuse someone unfamiliar with the project —
+skip anything obvious from the tech stack or standard industry usage.
 
-Format each entry as a definition list item:
+Categories to cover:
+- Internal names for services, systems, or subsystems (one-line purpose each)
+- Domain or business terms that have project-specific meaning
+- Abbreviations and acronyms used in code, docs, or team communication
+
+For component responsibilities and relationships, see Architecture.
+
+Format each entry as:
 
 **Term**
-: Definition and any relevant context.
+: Definition and relevant context.
 </Glossary>

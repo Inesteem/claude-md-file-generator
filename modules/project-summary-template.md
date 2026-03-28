@@ -7,7 +7,8 @@ description: Project purpose and tech stack (agent-filled)
 ---
 <Project Summary>
 Provide a brief summary of this project:
-- What problem does it solve?
-- What is the tech stack?
-- What are the key entry points?
+- Project name and one-sentence purpose
+- What problem does it solve and for whom?
+- What is the tech stack (language, framework, runtime)?
+- What are the primary entry points (CLI commands, API endpoints, main modules)?
 </Project Summary>

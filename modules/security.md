@@ -7,8 +7,9 @@ description: Security practices for handling credentials and sensitive operation
 ---
 ## Security
 
-- Never output API keys, credentials, or secrets in any response or generated file
-- Use placeholder tokens like `<REDACTED>` when a secret must be referenced in output
+- Never output real API keys, credentials, or secrets in any response, generated file, or example
+- When a secret must appear in output, use the placeholder format `<PLACEHOLDER_NAME>` (e.g. `<API_KEY>`, `<DB_PASSWORD>`, `Bearer <TOKEN>`)
+- Ensure secrets are excluded from log output, debug traces, and error messages
 - Refuse destructive production operations (e.g. DROP, DELETE, data wipes) without explicit confirmation
 - Do not commit `.env` files or files containing credentials to version control
 - Sanitize user-supplied input at all system boundaries before use

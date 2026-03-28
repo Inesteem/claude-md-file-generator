@@ -94,8 +94,7 @@ The `modules/` directory in this repository contains ready-to-use examples:
 | `forbidden-actions.md` | 9 | static | Explicit anti-patterns and forbidden behaviors |
 | `git-rules.md` | 10 | static | Git workflow and commit practices |
 | `pr-workflow.md` | 12 | static | Pull request conventions |
-| `tdd-practices.md` | 15 | static | Test-driven development guidelines |
-| `testing-patterns.md` | 16 | static | Advanced testing patterns |
+| `tdd-practices.md` | 15 | static | TDD guidelines and testing patterns |
 | `code-style.md` | 20 | static | Code style and formatting |
 | `code-quality.md` | 22 | static | Linting and type checking |
 | `documentation.md` | 25 | static | Documentation practices |

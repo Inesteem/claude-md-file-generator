@@ -7,9 +7,9 @@ description: Safe collaboration patterns for multi-agent tasks
 ---
 ## Multi-Agent Workflow
 
+- Re-read the current file state before every write — never patch from stale context
 - Assign tasks with clear, non-overlapping file boundaries to avoid merge conflicts
-- Always stage specific files by name — never use `git add -A` or `git add .` in automated contexts
+- Announce which files you intend to modify before starting work on a task
 - Each agent works on its own branch; merge through pull requests, not direct pushes
-- Resolve conflicts by re-reading the current file state before writing — never patch from stale context
 - Keep task descriptions self-contained: include file paths, expected inputs/outputs, and acceptance criteria
 - Prefer many small isolated tasks over one large task touching many files simultaneously

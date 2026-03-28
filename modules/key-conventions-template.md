@@ -7,10 +7,12 @@ description: Project-specific patterns and constraints (agent-filled)
 ---
 <Key Conventions>
 Document the project-specific conventions an agent must follow:
-- Result/error handling approach (e.g. exceptions, Result types, error codes)
-- Logging conventions (library used, log levels, what gets logged)
-- Python version constraints and any syntax that must be avoided
-- Naming conventions that differ from language defaults
+- Error handling approach (exceptions, Result types, error codes, HTTP status patterns)
+- Logging conventions (library, log levels, structured vs. unstructured, what to log)
+- Language version constraints and any syntax or features to avoid
+- Naming conventions that differ from language or framework defaults
+- Import/module organization rules
+- Testing conventions (naming, fixture patterns, mocking approach)
 - Important configuration files and where settings live
-- Any patterns that look wrong but are intentional — explain them here
+- Any patterns that look wrong but are intentional — explain why here
 </Key Conventions>

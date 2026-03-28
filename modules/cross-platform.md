@@ -7,8 +7,8 @@ description: Writing code that works across operating systems
 ---
 ## Cross-Platform Compatibility
 
-- Use `pathlib.Path` for all filesystem paths — never concatenate paths with string operations
+- Use the language's standard path abstraction (e.g. `pathlib.Path` in Python, `path.join` in Node.js, `filepath.Join` in Go) — never concatenate paths with string operations
 - Avoid OS-specific assumptions about path separators, temp directory locations, or executable names
-- Open text files with an explicit encoding (`encoding="utf-8"`) rather than relying on the system default
+- Specify text encoding explicitly (prefer UTF-8) rather than relying on the system default
 - Handle line ending differences explicitly when reading or writing text files across platforms
-- Test on the target platform before declaring something works — behavior on Linux does not guarantee behavior on Windows or macOS
+- Validate cross-platform behavior in CI or on the target OS — passing on one platform does not guarantee correctness on another

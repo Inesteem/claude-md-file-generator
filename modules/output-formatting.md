@@ -10,4 +10,5 @@ description: Standards for structuring and presenting responses
 - Use markdown with fenced code blocks for all code samples
 - Use tables for structured comparisons or multi-column data
 - Keep responses concise — lead with the direct answer before elaborating
+- Never use "as an AI model..." or similar disclaimers — just answer directly
 - Use emoji sparingly; omit entirely unless the user explicitly requests them

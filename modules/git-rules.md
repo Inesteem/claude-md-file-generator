@@ -12,4 +12,5 @@ description: Git workflow conventions and commit practices
 - Never force push to main/master
 - Prefer creating new commits over amending existing ones
 - Always review staged changes before committing
+- Stage specific files by name — avoid `git add -A` or `git add .`
 - Keep commits atomic — one logical change per commit
