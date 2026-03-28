@@ -14,7 +14,7 @@ Stop writing `CLAUDE.md` files from scratch. Pick from 38 reusable modules — g
 # Install from GitHub
 pip install git+https://github.com/yourusername/claude-mdfile-generator.git
 
-# Bootstrap your modules directory with all 38 bundled modules
+# Bootstrap your modules directory with all 42 bundled modules
 claude-md --init
 
 # Or just use the bundled modules directly (read-only)
@@ -81,7 +81,7 @@ The TUI lets you:
 | Flag | Description |
 |---|---|
 | `--modules-dir PATH` | Use a custom modules directory |
-| `--bundled` | Use the 38 modules shipped with the package (read-only) |
+| `--bundled` | Use the 42 modules shipped with the package (read-only) |
 | `--init` | Copy bundled modules to your modules directory (won't overwrite existing) |
 | `--init-skills DIR` | Copy the bundled `fill` skill to a directory (e.g. `~/.claude/skills`) |
 
@@ -99,7 +99,7 @@ By default, modules are stored in `~/.config/claude-mdfile-generator/modules/`.
 To get started with the bundled modules:
 
 ```bash
-# Copy all 38 bundled modules to your config dir for customization
+# Copy all 42 bundled modules to your config dir for customization
 claude-md --init
 
 # Or copy to a project-local directory
@@ -178,7 +178,7 @@ Ask the user:
 
 ## Bundled modules
 
-The package ships with **38 modules** (20 template, 18 static) organized by topic:
+The package ships with **42 modules** (22 template, 20 static) organized by topic:
 
 ### Project overview (templates)
 
@@ -220,9 +220,11 @@ The package ships with **38 modules** (20 template, 18 static) organized by topi
 | — | Pre-commit Hooks (27) | Hook framework, hooks in order, install command |
 | Error Handling (28) | Error Patterns (29) | Custom error types, propagation, retry policies |
 | Dependency Management (30) | Dependency Configuration (30) | Package manager, lock files, banned packages |
+| Changelog Conventions (33) | Changelog Configuration (33) | Changelog format, versioning, release process |
 | API Interaction (34) | API Configuration (34) | Specific APIs, auth patterns, rate limits |
 | Multi-Agent Workflow (35) | — | Generic; no project-specific details needed |
 | Slash Commands (36) | — | Claude Code meta-advice; no project-specific template |
+| TODO Conventions (37) | TODO Inventory (37) | Scans for TODOs/FIXMEs, surfaces technical debt |
 | Database Conventions (38) | Database Configuration (38) | Engine, ORM, migration tool, connection setup |
 
 ### Platform and output (static only)
@@ -279,13 +281,25 @@ The `fill` skill instructs an agent to:
 | `<Fill Dependency Configuration>` | Locates package manager, lock files | Yes |
 | `<Fill Database Configuration>` | Identifies engine, ORM, migrations | Yes |
 | `<Fill API Configuration>` | Finds API clients, auth patterns | Yes |
+| `<Fill Changelog Configuration>` | Identifies changelog format, versioning, release process | Yes |
+| `<Fill TODO Inventory>` | Greps for TODO/FIXME/HACK, categorizes and surfaces critical items | Yes |
+
+### Final review pass
+
+After filling all templates, the skill instructs the agent to do a coherence review of the entire file:
+
+1. **Duplications** — finds rules repeated across static + filled sections, keeps the more specific version
+2. **Contradictions** — catches where generic advice conflicts with the project's actual setup
+3. **Irrelevant sections** — recommends removing static modules that don't apply (e.g. Database Conventions when there's no database)
+4. **Restructuring** — suggests merging overly granular sections or reordering for better flow
 
 ### Workflow
 
 1. **Generate** a `CLAUDE.md` with the TUI, selecting the modules you want
 2. **Run the fill skill** by pointing an agent at the target project with the skill prompt
 3. The agent reads the codebase, fills in templates, and asks you about anything it can't determine from code alone
-4. **Review** the filled-in `CLAUDE.md` and commit it to the project
+4. The agent does a **final review pass** checking for duplications, contradictions, and irrelevant sections
+5. **Review** the agent's suggestions and the filled-in `CLAUDE.md`, then commit it to the project
 
 ## Development
 

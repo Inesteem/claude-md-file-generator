@@ -10,8 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Interactive TUI for browsing, selecting, creating, editing, and deleting modules
-- 38 bundled modules (20 template, 18 static) covering project setup, workflow, code quality, security, and ops
-- Agent skill (`fill.md`) for filling 20 template placeholder types
+- 42 bundled modules (22 template, 20 static) covering project setup, workflow, code quality, security, ops, TODOs, and changelogs
+- Agent skill (`fill.md`) for filling 22 template placeholder types
+- Final review pass in fill skill: checks for duplicated advice, contradictions, irrelevant sections, and restructuring opportunities
 - `--init` to bootstrap user modules from the bundled library
 - `--bundled` for read-only access to bundled modules
 - `--init-skills` to install the fill agent skill
