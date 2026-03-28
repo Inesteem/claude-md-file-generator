@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Agent skill (`fill.md`) for filling 22 template placeholder types
 - Agent skill (`compose-claude-md.md`) for end-to-end agent-driven CLAUDE.md composition
 - Final review pass in fill skill: checks for duplicated advice, contradictions, irrelevant sections, and restructuring opportunities
+- Slash commands: `/compose-claude-md` and `/fill-claude-md` in `.claude/commands/`
 - Non-interactive CLI: `claude-md list` and `claude-md generate` subcommands for agent/script use
 - `claude-md list` with `--json`, `--tags`, `--type` filtering
 - `claude-md generate` with `--modules`, `--tags`, `--type`, `--exclude`, `-o` output

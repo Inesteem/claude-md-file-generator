@@ -356,9 +356,24 @@ The agent workflow:
 6. **Review** for duplications, contradictions, and irrelevant sections
 7. **Present** the completed CLAUDE.md to the user for approval
 
-Two skills are shipped:
+Two skills are shipped (installed to `~/.claude/skills/` via `init-skills`):
 - **`fill.md`** — instructions for filling `<Fill ...>` template blocks + final review pass
 - **`compose-claude-md.md`** — end-to-end workflow for selecting modules, generating, and filling
+
+### Slash commands
+
+The project includes Claude Code slash commands in `.claude/commands/`:
+
+| Command | Description |
+|---|---|
+| `/compose-claude-md [path]` | Full workflow: analyze project, select modules, generate, fill, review |
+| `/fill-claude-md [path]` | Fill all `<Fill ...>` blocks in an existing CLAUDE.md |
+
+These are available automatically when working inside the repo. To install them globally:
+
+```bash
+cp .claude/commands/*.md ~/.claude/commands/
+```
 
 ## Development
 
@@ -385,16 +400,17 @@ pyright src/
 
 ```
 claude-mdfile-generator/
+  .claude/commands/    # Slash commands: /compose-claude-md, /fill-claude-md
   src/claude_mdfile_generator/
     models.py          # Module dataclass and ModuleType enum
     storage.py         # CRUD for module files (YAML frontmatter markdown)
     generator.py       # Compose selected modules into a claude.md string
     tui.py             # Interactive TUI (questionary + rich)
-    cli.py             # CLI entry point with --init, --bundled, --init-skills
+    cli.py             # CLI entry point with list, generate, init, init-skills subcommands
     bundled.py         # Access bundled modules/skills shipped with the package
-    bundled_modules/   # 38 bundled module files (embedded in pip package)
+    bundled_modules/   # 42 bundled module files (embedded in pip package)
     bundled_skills/    # fill.md + compose-claude-md.md skills (embedded in pip package)
-  tests/               # 65 tests (models, storage, generator, TUI, CLI, bundled)
+  tests/               # 80 tests (models, storage, generator, TUI, CLI, bundled)
   modules/             # Source of truth for bundled modules (development copy)
   skills/              # Source of truth for bundled skills (development copy)
 ```
