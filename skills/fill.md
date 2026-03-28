@@ -7,8 +7,18 @@ You are an agent tasked with filling in all `<Fill ...>` template sections in a 
 - Derive everything from the actual code — do not guess or assume
 - Be concise — each section should be the minimum needed to orient a new contributor
 - Omit sub-sections that don't apply to the project
-- If something is unclear from the code alone, say so rather than inventing
 - Keep the markdown heading level consistent (use `##` for section titles)
+
+## Asking the User
+
+Some templates include an "Ask the user" block. When you encounter one:
+
+1. First fill in everything you can derive from the codebase
+2. Then ask the user the listed questions — present what you found so far and ask them to confirm, correct, or add details
+3. Incorporate their answers into the final output
+4. If the user is unavailable or says "skip", fill in what you can and mark gaps with `<!-- TODO: ask project owner about ... -->`
+
+Never invent answers to user questions. If you can't derive it and can't ask, leave the TODO marker.
 
 ---
 
@@ -275,3 +285,38 @@ If no CI is configured, write "No CI pipeline configured." and move on.
 ```
 
 If no pre-commit hooks are configured, write "No pre-commit hooks configured." and move on.
+
+---
+
+## `<Fill Documentation Strategy>`
+
+**What to read:** All README files, docs/ directory, any .rst/.md docs, Sphinx/typedoc/rustdoc config, requirements docs, changelogs, CONTRIBUTING.md.
+
+**Ask the user:**
+- Are there docs outside the repo (wiki, Confluence, Notion, Google Docs)? Where?
+- Which docs are user-facing vs. developer-facing?
+- Is there a documentation review process (e.g. docs required in PRs)?
+
+**Output format:**
+```markdown
+## Documentation Strategy
+
+### Documentation Inventory
+| Artifact | Location | Covers | Update when |
+|---|---|---|---|
+| <name> | `<path>` | <what it covers> | <trigger for update> |
+
+### Generated Docs
+- **Tool:** <Sphinx, typedoc, etc. — or "None">
+- **Build command:** `<command>`
+- **Output:** `<where generated docs go>`
+
+### External Docs
+- <wiki/Confluence/Notion links and what they cover — or "None">
+
+### Process
+- <when and how docs are updated: in PRs, after release, on a schedule>
+- <who is responsible: author, reviewer, dedicated docs role>
+```
+
+Omit subsections that don't apply. If the project has no documentation beyond a root README, say so simply.

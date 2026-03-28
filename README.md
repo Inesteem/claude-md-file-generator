@@ -127,6 +127,7 @@ The `modules/` directory in this repository contains ready-to-use examples:
 | `type-checker-config-template.md` | 23 | template | Type checker setup and commands (verified) |
 | `formatter-config-template.md` | 24 | template | Formatter setup and commands (verified) |
 | `documentation.md` | 25 | static | Documentation practices |
+| `documentation-strategy-template.md` | 25 | template | Doc inventory and maintenance process (verified, asks user) |
 | `security.md` | 26 | static | Security and secrets handling |
 | `ci-pipeline-template.md` | 27 | template | CI/CD pipeline configuration (verified) |
 | `pre-commit-hooks-template.md` | 27 | template | Pre-commit hook setup (verified) |
@@ -161,6 +162,9 @@ The skill recognizes these tags:
 | `<Fill Type Checker Configuration>` | Identifies type checker, runs it, documents strictness |
 | `<Fill CI Pipeline>` | Reads CI config, documents checks, matrix, required gates |
 | `<Fill Pre-commit Hooks>` | Reads hook config, documents hooks in order, install command |
+| `<Fill Documentation Strategy>` | Inventories docs, asks user about external docs and process |
+
+Some templates include "Ask the user" prompts. The agent will fill in what it can from the codebase, then ask the user to confirm, correct, or add details. If the user is unavailable, gaps are marked with `<!-- TODO -->` comments.
 
 ### Usage
 
