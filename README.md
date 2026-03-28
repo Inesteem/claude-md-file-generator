@@ -120,6 +120,9 @@ claude-md generate --bundled --type static -o CLAUDE.md
 
 # Generate modules matching tags
 claude-md generate --bundled --tags testing,security -o CLAUDE.md
+
+# Append modules to an existing CLAUDE.md (won't overwrite)
+claude-md generate --bundled --modules "Linter Configuration,Security" --append -o CLAUDE.md
 ```
 
 ### Environment variable
