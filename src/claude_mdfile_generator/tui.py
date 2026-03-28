@@ -89,9 +89,7 @@ def action_browse_and_generate(modules_dir: Path) -> None:
     output = generate(selected)
     console.print(Panel(Markdown(output), title="Preview", border_style="green"))
 
-    output_path = questionary.path(
-        "Output path:", default="CLAUDE.md"
-    ).ask()
+    output_path = questionary.path("Output path:", default="CLAUDE.md").ask()
     if not output_path:
         return
 
@@ -122,9 +120,7 @@ def action_create_module(modules_dir: Path) -> None:
     order = int(order_str) if order_str and order_str.isdigit() else 50
 
     if mod_type == "template":
-        tag_name = questionary.text(
-            "Template tag name (e.g. Architecture):", default=name
-        ).ask()
+        tag_name = questionary.text("Template tag name (e.g. Architecture):", default=name).ask()
         hint = questionary.text("Instructions for the agent:").ask() or "Fill in this section."
         content = f"<{tag_name}>\n{hint}\n</{tag_name}>\n"
     else:

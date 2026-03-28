@@ -1,7 +1,7 @@
 """Shared test fixtures."""
 
 import pytest
-from pathlib import Path
+
 from claude_mdfile_generator.models import Module, ModuleType
 
 

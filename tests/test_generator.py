@@ -1,7 +1,7 @@
 """Tests for the claude.md generator."""
 
-from claude_mdfile_generator.models import Module, ModuleType
 from claude_mdfile_generator.generator import generate
+from claude_mdfile_generator.models import Module, ModuleType
 
 
 class TestGenerate:

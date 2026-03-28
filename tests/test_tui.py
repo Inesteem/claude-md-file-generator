@@ -1,9 +1,9 @@
 """Smoke tests for the TUI layer."""
 
-from unittest.mock import patch, MagicMock
 from pathlib import Path
+from unittest.mock import patch
 
-from claude_mdfile_generator.tui import get_modules_dir, DEFAULT_MODULES_DIR
+from claude_mdfile_generator.tui import DEFAULT_MODULES_DIR, get_modules_dir
 
 
 class TestGetModulesDir:
@@ -24,4 +24,5 @@ class TestRunTui:
         with patch("claude_mdfile_generator.tui.questionary") as mock_q:
             mock_q.select.return_value.ask.return_value = "Exit"
             from claude_mdfile_generator.tui import run_tui
+
             run_tui(modules_dir=Path("/tmp/nonexistent-test-dir"))

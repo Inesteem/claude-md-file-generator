@@ -1,6 +1,7 @@
 """Tests for the Module model and ModuleType enum."""
 
 import pytest
+
 from claude_mdfile_generator.models import Module, ModuleType
 
 
