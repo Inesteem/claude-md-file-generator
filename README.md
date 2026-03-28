@@ -76,14 +76,51 @@ The TUI lets you:
 4. **Write** it to a file (default: `CLAUDE.md`)
 5. **Create, edit, and delete** modules through the menu
 
-### CLI flags
+### Subcommands
+
+| Command | Description |
+|---|---|
+| `claude-md` | Launch the interactive TUI (default, no subcommand) |
+| `claude-md list` | List available modules (non-interactive) |
+| `claude-md generate` | Generate CLAUDE.md from selected modules (non-interactive) |
+| `claude-md init` | Copy bundled modules to your modules directory |
+| `claude-md init-skills DIR` | Copy bundled skills to a directory |
+
+### Global flags
 
 | Flag | Description |
 |---|---|
 | `--modules-dir PATH` | Use a custom modules directory |
-| `--bundled` | Use the 42 modules shipped with the package (read-only) |
-| `--init` | Copy bundled modules to your modules directory (won't overwrite existing) |
-| `--init-skills DIR` | Copy the bundled `fill` skill to a directory (e.g. `~/.claude/skills`) |
+| `--bundled` | Use the 42 modules shipped with the package |
+| `--version` | Show version |
+
+### Non-interactive CLI (for agents and scripts)
+
+```bash
+# List all bundled modules as JSON
+claude-md list --bundled --json
+
+# List only template modules
+claude-md list --bundled --type template
+
+# List modules by tag
+claude-md list --bundled --tags git,testing
+
+# Generate with all modules to stdout
+claude-md generate --bundled
+
+# Generate with specific modules to a file
+claude-md generate --bundled --modules "Git Rules,Testing,Security,Architecture" -o CLAUDE.md
+
+# Generate excluding modules that don't apply
+claude-md generate --bundled --exclude "Database Conventions,Database Configuration,API Interaction,API Configuration" -o CLAUDE.md
+
+# Generate only static modules (no templates)
+claude-md generate --bundled --type static -o CLAUDE.md
+
+# Generate modules matching tags
+claude-md generate --bundled --tags testing,security -o CLAUDE.md
+```
 
 ### Environment variable
 
@@ -100,10 +137,10 @@ To get started with the bundled modules:
 
 ```bash
 # Copy all 42 bundled modules to your config dir for customization
-claude-md --init
+claude-md init
 
 # Or copy to a project-local directory
-claude-md --init --modules-dir ./my-project-modules
+claude-md --modules-dir ./my-project-modules init
 ```
 
 ## How it works
@@ -301,6 +338,28 @@ After filling all templates, the skill instructs the agent to do a coherence rev
 4. The agent does a **final review pass** checking for duplications, contradictions, and irrelevant sections
 5. **Review** the agent's suggestions and the filled-in `CLAUDE.md`, then commit it to the project
 
+## Agent-driven workflow
+
+An agent can use the non-interactive CLI to compose a CLAUDE.md without the TUI. The `skills/compose-claude-md.md` skill provides step-by-step instructions.
+
+```bash
+# Install the compose skill alongside the fill skill
+claude-md init-skills ~/.claude/skills
+```
+
+The agent workflow:
+1. **Analyze** the target project (README, config, source code)
+2. **List** available modules: `claude-md list --bundled --json`
+3. **Select** relevant modules based on the project's stack and needs
+4. **Generate**: `claude-md generate --bundled --modules "..." -o CLAUDE.md`
+5. **Fill** all `<Fill ...>` template blocks by analyzing the codebase
+6. **Review** for duplications, contradictions, and irrelevant sections
+7. **Present** the completed CLAUDE.md to the user for approval
+
+Two skills are shipped:
+- **`fill.md`** — instructions for filling `<Fill ...>` template blocks + final review pass
+- **`compose-claude-md.md`** — end-to-end workflow for selecting modules, generating, and filling
+
 ## Development
 
 ### Running tests
@@ -334,7 +393,7 @@ claude-mdfile-generator/
     cli.py             # CLI entry point with --init, --bundled, --init-skills
     bundled.py         # Access bundled modules/skills shipped with the package
     bundled_modules/   # 38 bundled module files (embedded in pip package)
-    bundled_skills/    # fill.md skill (embedded in pip package)
+    bundled_skills/    # fill.md + compose-claude-md.md skills (embedded in pip package)
   tests/               # 65 tests (models, storage, generator, TUI, CLI, bundled)
   modules/             # Source of truth for bundled modules (development copy)
   skills/              # Source of truth for bundled skills (development copy)
