@@ -118,26 +118,34 @@ The `modules/` directory in this repository contains ready-to-use examples:
 | `key-conventions-template.md` | 6 | template | Project-specific patterns and constraints |
 | `investigation-first.md` | 8 | static | Read existing code before modifying |
 | `forbidden-actions.md` | 9 | static | Explicit anti-patterns and forbidden behaviors |
+| `forbidden-zones-template.md` | 9 | template | Project-specific no-touch zones (asks user) |
 | `git-rules.md` | 10 | static | Git workflow and commit practices |
+| `git-config-template.md` | 10 | template | Actual commit/branch/merge conventions |
 | `pr-workflow.md` | 12 | static | Pull request conventions |
+| `pr-config-template.md` | 12 | template | PR template, reviewers, labels (asks user) |
 | `tdd-practices.md` | 15 | static | TDD guidelines and testing patterns |
+| `testing-config-template.md` | 15 | template | Test framework, structure, coverage (verified, asks user) |
 | `code-style.md` | 20 | static | Code style and formatting |
+| `code-style-template.md` | 21 | template | Actual naming/import/style conventions |
 | `code-quality.md` | 22 | static | Linting and type checking |
 | `linter-config-template.md` | 23 | template | Linter setup and commands (verified) |
 | `type-checker-config-template.md` | 23 | template | Type checker setup and commands (verified) |
 | `formatter-config-template.md` | 24 | template | Formatter setup and commands (verified) |
 | `documentation.md` | 25 | static | Documentation practices |
-| `documentation-strategy-template.md` | 25 | template | Doc inventory and maintenance process (verified, asks user) |
+| `documentation-strategy-template.md` | 25 | template | Doc inventory and maintenance process (asks user) |
 | `security.md` | 26 | static | Security and secrets handling |
 | `ci-pipeline-template.md` | 27 | template | CI/CD pipeline configuration (verified) |
 | `pre-commit-hooks-template.md` | 27 | template | Pre-commit hook setup (verified) |
 | `error-handling.md` | 28 | static | Error handling and resilience |
+| `error-patterns-template.md` | 29 | template | Actual error types and propagation (asks user) |
 | `dependency-management.md` | 30 | static | Keeping dependencies minimal |
-| `environment-setup.md` | 32 | static | Environment variables and setup |
+| `dependency-config-template.md` | 30 | template | Package manager, lock files, policies (asks user) |
 | `api-interaction.md` | 34 | static | API interaction conventions |
+| `api-config-template.md` | 34 | template | Specific APIs, auth, clients (asks user) |
 | `multi-agent-workflow.md` | 35 | static | Safe multi-agent collaboration |
 | `slash-commands.md` | 36 | static | Custom slash commands for Claude Code |
 | `database-conventions.md` | 38 | static | Database naming and migration practices |
+| `database-config-template.md` | 38 | template | Engine, ORM, migrations (verified, asks user) |
 | `cross-platform.md` | 40 | static | Cross-platform compatibility |
 | `performance.md` | 42 | static | Performance and optimization guidelines |
 | `output-formatting.md` | 45 | static | Output formatting preferences |
@@ -163,6 +171,15 @@ The skill recognizes these tags:
 | `<Fill CI Pipeline>` | Reads CI config, documents checks, matrix, required gates |
 | `<Fill Pre-commit Hooks>` | Reads hook config, documents hooks in order, install command |
 | `<Fill Documentation Strategy>` | Inventories docs, asks user about external docs and process |
+| `<Fill Testing Configuration>` | Identifies test framework, runs suite, documents coverage (asks user) |
+| `<Fill Forbidden Zones>` | Finds generated/locked/team-owned files (asks user) |
+| `<Fill Error Patterns>` | Traces error types and propagation patterns (asks user) |
+| `<Fill Git Configuration>` | Inspects commits/branches for actual conventions (asks user) |
+| `<Fill PR Configuration>` | Finds PR templates, CODEOWNERS, required checks (asks user) |
+| `<Fill Code Style>` | Samples source files for naming/import conventions |
+| `<Fill Dependency Configuration>` | Locates package manager, lock files, policies (asks user) |
+| `<Fill Database Configuration>` | Identifies engine, ORM, migrations (asks user) |
+| `<Fill API Configuration>` | Finds API clients, auth patterns, rate limits (asks user) |
 
 Some templates include "Ask the user" prompts. The agent will fill in what it can from the codebase, then ask the user to confirm, correct, or add details. If the user is unavailable, gaps are marked with `<!-- TODO -->` comments.
 
