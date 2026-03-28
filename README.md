@@ -14,11 +14,8 @@ Stop writing `CLAUDE.md` files from scratch. Pick from 42 reusable modules — g
 # Install from GitHub
 pip install git+https://github.com/Inesteem/claude-mdfile-generator.git
 
-# Bootstrap your modules directory with all 42 bundled modules
-claude-md --init
-
-# Or just use the bundled modules directly (read-only)
-claude-md --bundled
+# Run — bundled modules are used by default, no flags needed
+claude-md
 ```
 
 ## Installation
@@ -91,7 +88,7 @@ The TUI lets you:
 | Flag | Description |
 |---|---|
 | `--modules-dir PATH` | Use a custom modules directory |
-| `--bundled` | Use the 42 modules shipped with the package |
+| `--bundled` | Force use of bundled modules (default if user config dir is empty) |
 | `--version` | Show version |
 
 ### Non-interactive CLI (for agents and scripts)
@@ -134,12 +131,10 @@ claude-md
 
 ### Modules directory
 
-By default, modules are stored in `~/.config/claude-mdfile-generator/modules/`.
-
-To get started with the bundled modules:
+Out of the box, `claude-md` uses the bundled modules shipped with the package. If you want to customize modules, copy them to your config directory:
 
 ```bash
-# Copy all 42 bundled modules to your config dir for customization
+# Copy all 42 bundled modules to ~/.config/claude-mdfile-generator/modules/
 claude-md init
 
 # Or copy to a project-local directory
