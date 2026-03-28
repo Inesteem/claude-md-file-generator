@@ -1,8 +1,39 @@
 # claude-mdfile-generator
 
-A lightweight TUI for composing `CLAUDE.md` files from a library of reusable modules. Pick the modules that apply to your project, preview the result, and write it out in one step.
+A lightweight TUI for composing `CLAUDE.md` files from a library of reusable modules. Pick the modules that apply to your project, preview the result, and write it out — then let an agent fill in the project-specific details.
 
-## Requirements
+## Quick start
+
+```bash
+pip install ~/path/to/claude-mdfile-generator
+
+# Bootstrap your modules directory with all 38 bundled modules
+claude-md --init
+
+# Or just use the bundled modules directly (read-only)
+claude-md --bundled
+```
+
+## Installation
+
+### From source (editable, for development)
+
+```bash
+cd ~/Documents/claude-mdfile-generator
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+```
+
+### As a pip package (for use in any project)
+
+```bash
+pip install ~/Documents/claude-mdfile-generator
+```
+
+After installation, the `claude-md` command is available globally in the Python environment.
+
+### Requirements
 
 - Python 3.11+
 
@@ -19,49 +50,76 @@ Dev dependencies:
 | Package | Version | Purpose |
 |---|---|---|
 | `pytest` | >=8.0 | Test framework |
-
-Pinned versions are available in `requirements.txt` and `requirements-dev.txt`.
-
-## Installation
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
-```
-
-Or without editable install:
-
-```bash
-pip install -r requirements-dev.txt
-```
+| `ruff` | >=0.8 | Linter and formatter |
+| `pyright` | >=1.1 | Type checker |
 
 ## Usage
 
-```
+### Interactive TUI
+
+```bash
 claude-md
 ```
 
-or
+The TUI lets you:
+1. **Browse** all available modules in a table
+2. **Select** the modules you want via checkbox
+3. **Preview** the assembled `CLAUDE.md` in the terminal
+4. **Write** it to a file (default: `CLAUDE.md`)
+5. **Create, edit, and delete** modules through the menu
 
+### CLI flags
+
+| Flag | Description |
+|---|---|
+| `--modules-dir PATH` | Use a custom modules directory |
+| `--bundled` | Use the 38 modules shipped with the package (read-only) |
+| `--init` | Copy bundled modules to your modules directory (won't overwrite existing) |
+| `--init-skills DIR` | Copy the bundled `fill` skill to a directory (e.g. `~/.claude/skills`) |
+
+### Environment variable
+
+```bash
+export CLAUDE_MD_MODULES_DIR=~/my-modules
+claude-md
 ```
-python -m claude_mdfile_generator.cli
+
+### Modules directory
+
+By default, modules are stored in `~/.config/claude-mdfile-generator/modules/`.
+
+To get started with the bundled modules:
+
+```bash
+# Copy all 38 bundled modules to your config dir for customization
+claude-md --init
+
+# Or copy to a project-local directory
+claude-md --init --modules-dir ./my-project-modules
 ```
 
-The TUI lets you browse your module library, select the modules you want, preview the generated output, and write it to a file (default: `CLAUDE.md`).
+## How it works
 
-## Module concept
+### Module concept
 
 Modules are the building blocks of a `CLAUDE.md` file. There are two types:
 
-- **static** — contains finished content written by you. It is included as-is.
-- **template** — contains a placeholder instruction wrapped in an XML-style tag. The agent (Claude) is expected to fill it in when it reads the file.
+- **static** — Generic best-practice advice (e.g. "use conventional commits", "write tests before implementation"). Included as-is in the generated file. Same content for every project.
+- **template** — A `<Fill SectionName>` placeholder block with instructions for an agent. The agent analyzes the target project's codebase and replaces the placeholder with real, project-specific content.
 
-## Module storage format
+Most topics ship as a **static + template pair**. The static module provides universal rules; the companion template captures what's actually true for this specific project:
 
-Each module is a Markdown file with YAML frontmatter stored in a directory:
+| Example | Static module | Companion template |
+|---|---|---|
+| Git | "Use conventional commits, keep commits atomic" | "This project uses Angular-style commits, squash merges to `main`" |
+| Testing | "Write tests before implementation, prefer real implementations over mocks" | "Uses pytest, tests in `tests/`, 90% coverage required, uses `tmp_path` fixtures" |
+| Database | "Use snake_case, write idempotent migrations" | "PostgreSQL + SQLAlchemy + Alembic, migrations in `alembic/versions/`" |
 
-```
+### Module storage format
+
+Each module is a Markdown file with YAML frontmatter:
+
+```markdown
 ---
 name: Module Name
 type: static
@@ -75,7 +133,27 @@ description: One-line description
 - Guideline two
 ```
 
-Fields:
+Template modules use `<Fill ...>` tags instead of markdown content:
+
+```markdown
+---
+name: Module Name
+type: template
+tags: [relevant, tags]
+order: 20
+description: One-line description (agent-filled)
+---
+<Fill Module Name>
+Instructions for the agent:
+- What to look for in the codebase
+- What to document
+
+Ask the user:
+- Questions the agent cannot answer from code alone
+</Fill Module Name>
+```
+
+### Frontmatter fields
 
 | Field | Required | Notes |
 |---|---|---|
@@ -85,106 +163,157 @@ Fields:
 | `order` | no | Integer; lower values appear first (default 50) |
 | `description` | no | One-line summary shown in the TUI table |
 
-## Modules directory
+### Creating custom modules
 
-By default modules are stored in `~/.config/claude-mdfile-generator/modules/`.
+- **Via TUI:** Select "Create new module" from the main menu
+- **Manually:** Create a `.md` file in your modules directory following the format above
 
-Override with the `--modules-dir` flag:
+## Bundled modules
 
-```
-claude-md --modules-dir ./my-modules
-```
+The package ships with **38 modules** (20 template, 18 static) organized by topic:
 
-Or set the environment variable:
+### Project overview (templates)
 
-```
-CLAUDE_MD_MODULES_DIR=./my-modules claude-md
-```
+| Module | Order | Description |
+|---|---|---|
+| Project Summary | 1 | Project name, purpose, tech stack, entry points |
+| Project Context | 2 | Setup commands, test/lint commands, env requirements |
+| Glossary | 3 | Project-specific terms and jargon |
+| Architecture | 5 | Directory structure, components, data flows, state |
+| Key Conventions | 6 | Error handling, logging, naming, testing conventions |
 
-## Creating custom modules
+### Workflow (static + template pairs)
 
-Use the TUI ("Create new module") or create a `.md` file directly in the modules directory following the format above.
+| Static module | Companion template | What the template adds |
+|---|---|---|
+| Investigation First (8) | — | Generic; no project-specific details needed |
+| Forbidden Actions (9) | Forbidden Zones (9) | Generated files, lock files, team-owned boundaries |
+| Git Rules (10) | Git Configuration (10) | Actual commit format, branch naming, merge strategy |
+| PR Workflow (12) | PR Configuration (12) | PR template, CODEOWNERS, labels, required checks |
+| Testing (15) | Testing Configuration (15) | Framework, directory structure, coverage, fixtures |
 
-## Bundled example modules
+### Code quality (static + template pairs)
 
-The `modules/` directory in this repository contains ready-to-use examples:
+| Static module | Companion template | What the template adds |
+|---|---|---|
+| Code Style (20) | Code Style (21) | Naming conventions, import ordering, project patterns |
+| Code Quality (22) | — | Generic; tooling details in separate templates below |
+| — | Linter Configuration (23) | Which linter, commands, config, notable rules |
+| — | Type Checker Configuration (23) | Which type checker, commands, strictness |
+| — | Formatter Configuration (24) | Which formatter, commands, settings |
+| Documentation (25) | Documentation Strategy (25) | Doc inventory, update triggers, external docs |
 
-| File | Order | Type | Description |
-|---|---|---|---|
-| `project-summary-template.md` | 1 | template | Project purpose and tech stack |
-| `project-context-template.md` | 2 | template | Setup commands and environment |
-| `glossary-template.md` | 3 | template | Project-specific terminology |
-| `architecture-template.md` | 5 | template | High-level architecture overview |
-| `key-conventions-template.md` | 6 | template | Project-specific patterns and constraints |
-| `investigation-first.md` | 8 | static | Read existing code before modifying |
-| `forbidden-actions.md` | 9 | static | Explicit anti-patterns and forbidden behaviors |
-| `forbidden-zones-template.md` | 9 | template | Project-specific no-touch zones (asks user) |
-| `git-rules.md` | 10 | static | Git workflow and commit practices |
-| `git-config-template.md` | 10 | template | Actual commit/branch/merge conventions |
-| `pr-workflow.md` | 12 | static | Pull request conventions |
-| `pr-config-template.md` | 12 | template | PR template, reviewers, labels (asks user) |
-| `tdd-practices.md` | 15 | static | TDD guidelines and testing patterns |
-| `testing-config-template.md` | 15 | template | Test framework, structure, coverage (verified, asks user) |
-| `code-style.md` | 20 | static | Code style and formatting |
-| `code-style-template.md` | 21 | template | Actual naming/import/style conventions |
-| `code-quality.md` | 22 | static | Linting and type checking |
-| `linter-config-template.md` | 23 | template | Linter setup and commands (verified) |
-| `type-checker-config-template.md` | 23 | template | Type checker setup and commands (verified) |
-| `formatter-config-template.md` | 24 | template | Formatter setup and commands (verified) |
-| `documentation.md` | 25 | static | Documentation practices |
-| `documentation-strategy-template.md` | 25 | template | Doc inventory and maintenance process (asks user) |
-| `security.md` | 26 | static | Security and secrets handling |
-| `ci-pipeline-template.md` | 27 | template | CI/CD pipeline configuration (verified) |
-| `pre-commit-hooks-template.md` | 27 | template | Pre-commit hook setup (verified) |
-| `error-handling.md` | 28 | static | Error handling and resilience |
-| `error-patterns-template.md` | 29 | template | Actual error types and propagation (asks user) |
-| `dependency-management.md` | 30 | static | Keeping dependencies minimal |
-| `dependency-config-template.md` | 30 | template | Package manager, lock files, policies (asks user) |
-| `api-interaction.md` | 34 | static | API interaction conventions |
-| `api-config-template.md` | 34 | template | Specific APIs, auth, clients (asks user) |
-| `multi-agent-workflow.md` | 35 | static | Safe multi-agent collaboration |
-| `slash-commands.md` | 36 | static | Custom slash commands for Claude Code |
-| `database-conventions.md` | 38 | static | Database naming and migration practices |
-| `database-config-template.md` | 38 | template | Engine, ORM, migrations (verified, asks user) |
-| `cross-platform.md` | 40 | static | Cross-platform compatibility |
-| `performance.md` | 42 | static | Performance and optimization guidelines |
-| `output-formatting.md` | 45 | static | Output formatting preferences |
+### Security and operations (static + template pairs)
 
-Copy any of these into your modules directory to get started.
+| Static module | Companion template | What the template adds |
+|---|---|---|
+| Security (26) | — | Generic; no project-specific details needed |
+| — | CI Pipeline (27) | CI system, checks, matrix, required gates |
+| — | Pre-commit Hooks (27) | Hook framework, hooks in order, install command |
+| Error Handling (28) | Error Patterns (29) | Custom error types, propagation, retry policies |
+| Dependency Management (30) | Dependency Configuration (30) | Package manager, lock files, banned packages |
+| API Interaction (34) | API Configuration (34) | Specific APIs, auth patterns, rate limits |
+| Multi-Agent Workflow (35) | — | Generic; no project-specific details needed |
+| Slash Commands (36) | — | Claude Code meta-advice; no project-specific template |
+| Database Conventions (38) | Database Configuration (38) | Engine, ORM, migration tool, connection setup |
+
+### Platform and output (static only)
+
+| Static module | Order | Description |
+|---|---|---|
+| Cross-Platform Compatibility | 40 | Path abstractions, encoding, line endings |
+| Performance | 42 | Algorithm choices, batching, caching, profiling |
+| Output Formatting | 45 | Markdown conventions, conciseness, emoji policy |
 
 ## Agent skill for template modules
 
 Template modules produce `<Fill SectionName>...</Fill SectionName>` placeholder blocks in the generated `CLAUDE.md`. A single agent skill — `skills/fill.md` — handles all of them.
 
-The skill recognizes these tags:
+### Installing the skill
 
-| Tag | What the agent does |
-|---|---|
-| `<Fill Project Summary>` | Reads README and entry points to summarize the project |
-| `<Fill Project Context>` | Extracts setup, test, lint commands and env requirements |
-| `<Fill Glossary>` | Scans for domain-specific terms and jargon |
-| `<Fill Architecture>` | Maps directory structure, components, data flows |
-| `<Fill Key Conventions>` | Analyzes error handling, logging, naming, testing patterns |
-| `<Fill Linter Configuration>` | Identifies linter, runs it, documents config and commands |
-| `<Fill Formatter Configuration>` | Identifies formatter, runs check mode, documents settings |
-| `<Fill Type Checker Configuration>` | Identifies type checker, runs it, documents strictness |
-| `<Fill CI Pipeline>` | Reads CI config, documents checks, matrix, required gates |
-| `<Fill Pre-commit Hooks>` | Reads hook config, documents hooks in order, install command |
-| `<Fill Documentation Strategy>` | Inventories docs, asks user about external docs and process |
-| `<Fill Testing Configuration>` | Identifies test framework, runs suite, documents coverage (asks user) |
-| `<Fill Forbidden Zones>` | Finds generated/locked/team-owned files (asks user) |
-| `<Fill Error Patterns>` | Traces error types and propagation patterns (asks user) |
-| `<Fill Git Configuration>` | Inspects commits/branches for actual conventions (asks user) |
-| `<Fill PR Configuration>` | Finds PR templates, CODEOWNERS, required checks (asks user) |
-| `<Fill Code Style>` | Samples source files for naming/import conventions |
-| `<Fill Dependency Configuration>` | Locates package manager, lock files, policies (asks user) |
-| `<Fill Database Configuration>` | Identifies engine, ORM, migrations (asks user) |
-| `<Fill API Configuration>` | Finds API clients, auth patterns, rate limits (asks user) |
+```bash
+claude-md --init-skills ~/.claude/skills
+```
 
-Some templates include "Ask the user" prompts. The agent will fill in what it can from the codebase, then ask the user to confirm, correct, or add details. If the user is unavailable, gaps are marked with `<!-- TODO -->` comments.
+This copies `fill.md` to your global Claude Code skills directory.
 
-### Usage
+### What the skill does
 
-1. Generate a `CLAUDE.md` with the TUI, including the template modules you want
-2. Point an agent at the target project with the `fill` skill prompt
-3. The agent reads the codebase and replaces all `<Fill ...>` blocks with real content
+The `fill` skill instructs an agent to:
+
+1. Scan the `CLAUDE.md` for `<Fill ...>` blocks
+2. For each block, analyze the target project's codebase
+3. Replace the placeholder with real, verified content
+4. Ask the user when information cannot be derived from code alone
+5. Mark unresolvable gaps with `<!-- TODO -->` comments
+
+### Supported tags
+
+| Tag | Agent action | Asks user? |
+|---|---|---|
+| `<Fill Project Summary>` | Reads README, entry points, dep files | No |
+| `<Fill Project Context>` | Extracts setup, test, lint commands | No |
+| `<Fill Glossary>` | Scans for domain-specific terms | No |
+| `<Fill Architecture>` | Maps directory structure, components, data flows | No |
+| `<Fill Key Conventions>` | Analyzes error handling, logging, naming patterns | No |
+| `<Fill Testing Configuration>` | Identifies test framework, runs suite | Yes |
+| `<Fill Forbidden Zones>` | Finds generated/locked/team-owned files | Yes |
+| `<Fill Error Patterns>` | Traces error types and propagation | Yes |
+| `<Fill Git Configuration>` | Inspects recent commits and branches | Yes |
+| `<Fill PR Configuration>` | Finds PR templates, CODEOWNERS | Yes |
+| `<Fill Code Style>` | Samples source files for conventions | No |
+| `<Fill Linter Configuration>` | Identifies linter, runs it | No |
+| `<Fill Type Checker Configuration>` | Identifies type checker, runs it | No |
+| `<Fill Formatter Configuration>` | Identifies formatter, runs check mode | No |
+| `<Fill Documentation Strategy>` | Inventories docs and update triggers | Yes |
+| `<Fill CI Pipeline>` | Reads CI config files | No |
+| `<Fill Pre-commit Hooks>` | Reads hook config | No |
+| `<Fill Dependency Configuration>` | Locates package manager, lock files | Yes |
+| `<Fill Database Configuration>` | Identifies engine, ORM, migrations | Yes |
+| `<Fill API Configuration>` | Finds API clients, auth patterns | Yes |
+
+### Workflow
+
+1. **Generate** a `CLAUDE.md` with the TUI, selecting the modules you want
+2. **Run the fill skill** by pointing an agent at the target project with the skill prompt
+3. The agent reads the codebase, fills in templates, and asks you about anything it can't determine from code alone
+4. **Review** the filled-in `CLAUDE.md` and commit it to the project
+
+## Development
+
+### Running tests
+
+```bash
+pytest
+```
+
+### Linting and formatting
+
+```bash
+ruff check src/ tests/       # lint
+ruff format src/ tests/       # format
+```
+
+### Type checking
+
+```bash
+pyright src/
+```
+
+### Project structure
+
+```
+claude-mdfile-generator/
+  src/claude_mdfile_generator/
+    models.py          # Module dataclass and ModuleType enum
+    storage.py         # CRUD for module files (YAML frontmatter markdown)
+    generator.py       # Compose selected modules into a claude.md string
+    tui.py             # Interactive TUI (questionary + rich)
+    cli.py             # CLI entry point with --init, --bundled, --init-skills
+    bundled.py         # Access bundled modules/skills shipped with the package
+    bundled_modules/   # 38 bundled module files (embedded in pip package)
+    bundled_skills/    # fill.md skill (embedded in pip package)
+  tests/               # 44 tests (models, storage, generator, TUI)
+  modules/             # Source of truth for bundled modules (development copy)
+  skills/              # Source of truth for bundled skills (development copy)
+```
