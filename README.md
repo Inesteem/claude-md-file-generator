@@ -131,7 +131,11 @@ claude-md
 
 ### Modules directory
 
-Out of the box, `claude-md` uses the bundled modules shipped with the package. If you want to customize modules, copy them to your config directory:
+Out of the box, `claude-md` uses the bundled modules shipped with the package. You don't need to do anything to get started.
+
+When you create, edit, or delete a module for the first time, the bundled modules are automatically copied to `~/.config/claude-mdfile-generator/modules/` so you can customize them. From that point on, your local copy is used.
+
+You can also do this manually:
 
 ```bash
 # Copy all 42 bundled modules to ~/.config/claude-mdfile-generator/modules/

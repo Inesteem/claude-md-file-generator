@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Interactive TUI for browsing, selecting, creating, editing, and deleting modules
 - Bundled modules used by default — no flags needed for first-time users
+- Auto-migration: first create/edit/delete copies bundled modules to user config dir transparently
 - 42 bundled modules (22 template, 20 static) covering project setup, workflow, code quality, security, ops, TODOs, and changelogs
 - Agent skill (`fill.md`) for filling 22 template placeholder types
 - Agent skill (`compose-claude-md.md`) for end-to-end agent-driven CLAUDE.md composition
