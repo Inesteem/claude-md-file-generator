@@ -102,17 +102,23 @@ def _edit_in_editor(initial_content: str = "") -> str | None:
         Path(tmp_path).unlink(missing_ok=True)
 
 
-def _bundled_filenames() -> set[str]:
-    """Return the set of filenames in the bundled modules directory."""
+def _bundled_module_names() -> set[str]:
+    """Return the set of module names from the bundled modules directory."""
     try:
-        return {f.name for f in bundled_modules_path().glob("*.md")}
+        return {m.name for m in list_modules(bundled_modules_path())}
     except Exception:
         return set()
 
 
+_bundled_names_cache: set[str] | None = None
+
+
 def _module_source(module: Module) -> str:
     """Return 'bundled' or 'user' depending on whether the module ships with the package."""
-    return "bundled" if module.filename in _bundled_filenames() else "user"
+    global _bundled_names_cache
+    if _bundled_names_cache is None:
+        _bundled_names_cache = _bundled_module_names()
+    return "bundled" if module.name in _bundled_names_cache else "user"
 
 
 def _display_modules_table(modules: list[Module]) -> None:
